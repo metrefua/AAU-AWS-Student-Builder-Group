@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { publicAxios } from '../utils/axios';
 
 const AuthContext = createContext();
 
@@ -14,7 +15,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { isAuthenticated: isAuth0Authenticated, user: auth0User, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated: isAuth0Authenticated, user: auth0User } = useAuth0();
 
   useEffect(() => {
     const checkExistingSession = async () => {
@@ -23,19 +24,12 @@ export const AuthProvider = ({ children }) => {
         const rememberMe = localStorage.getItem('rememberMe') === 'true';
         
         if (token && rememberMe) {
-          const response = await fetch('http://localhost:5001/api/auth/me', {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          });
+          const response = await publicAxios.get('/auth/me');
           
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData);
-          } else {
-            localStorage.removeItem('token');
-            localStorage.removeItem('rememberMe');
-          }
+          // Axios automatically throws errors for non-2xx status codes
+          // If we reach here, the request was successful
+          const userData = response.data;
+          setUser(userData);
         }
       } catch (error) {
         if (!error.message?.includes('ECONNREFUSED') && !error.message?.includes('Failed to fetch')) {
@@ -74,20 +68,11 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       
-      const response = await fetch('http://localhost:5001/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
+      const response = await publicAxios.post('/auth/login', credentials);
       
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({ error: 'Network error' }));
-        throw new Error(data.error || `HTTP ${response.status}: Login failed`);
-      }
-
-      const data = await response.json();
+      // Axios automatically throws errors for non-2xx status codes
+      // If we reach here, the request was successful
+      const data = response.data;
 
       setUser(data.user);
       localStorage.setItem('token', data.token);
@@ -101,29 +86,48 @@ export const AuthProvider = ({ children }) => {
       setLoading(false); 
       return data;
     } catch (error) {
-      setLoading(false); 
-      throw error;
+      setLoading(false);
+      
+      // Handle Axios error response
+      if (error.response) {
+        const data = error.response.data;
+        if (data.errors) {
+          throw { fieldErrors: data.errors };
+        }
+        throw new Error(data.error || `HTTP ${error.response.status}: Login failed`);
+      }
+      
+      // Handle network errors
+      throw new Error(error.message || 'Network error');
     }
   };
 
   const signup = async (userData) => {
+    // Client-side validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const nameRegex = /^[a-zA-Z0-9 ]+$/;
+    const fieldErrors = {};
+
+    if (!emailRegex.test(userData.email)) {
+      fieldErrors.email = 'Please enter a valid email address.';
+    }
+    if (!userData.password || userData.password.length < 8) {
+      fieldErrors.password = 'Password must be at least 8 characters.';
+    }
+    if (!nameRegex.test(userData.fullName || userData.name || '')) {
+      fieldErrors.fullName = 'Name must contain only alphanumeric characters and spaces.';
+    }
+    if (Object.keys(fieldErrors).length > 0) {
+      throw { fieldErrors };
+    }
     try {
       setLoading(true);
       
-      const response = await fetch('http://localhost:5001/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({ error: 'Network error' }));
-        throw new Error(data.error || `HTTP ${response.status}: Signup failed`);
-      }
-
-      const data = await response.json();
+      const response = await publicAxios.post('/auth/signup', userData);
+      
+      // Axios automatically throws errors for non-2xx status codes
+      // If we reach here, the request was successful
+      const data = response.data;
 
       setUser(data.user);
       localStorage.setItem('token', data.token);
@@ -138,54 +142,53 @@ export const AuthProvider = ({ children }) => {
       return data;
     } catch (error) {
       setLoading(false);
-      throw error;
+      
+      // Handle Axios error response
+      if (error.response) {
+        const data = error.response.data;
+        if (data.errors) {
+          throw { fieldErrors: data.errors };
+        }
+        throw new Error(data.error || `HTTP ${error.response.status}: Signup failed`);
+      }
+      
+      // Handle network errors
+      throw new Error(error.message || 'Network error');
     }
   };
 
   const updateUser = async (updateData) => {
-    // eslint-disable-next-line no-useless-catch
     try {
-      const response = await fetch('http://localhost:5001/api/auth/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(updateData),
-      });
+      const response = await publicAxios.put('/auth/profile', updateData);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Update failed');
-      }
+      // Axios automatically throws errors for non-2xx status codes
+      // If we reach here, the request was successful
+      const data = response.data;
 
       setUser(data.user);
       return data;
     } catch (error) {
-      throw error;
+      // Handle Axios error response
+      if (error.response) {
+        const data = error.response.data;
+        throw new Error(data.message || 'Update failed');
+      }
+      
+      // Handle network errors
+      throw new Error(error.message || 'Network error');
     }
   };
 
   const uploadProfilePicture = async (file) => {
-    // eslint-disable-next-line no-useless-catch
     try {
       const formData = new FormData();
       formData.append('profilePicture', file);
 
-      const response = await fetch('http://localhost:5001/api/upload/profile-picture', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: formData,
-      });
+      const response = await publicAxios.post('/upload/profile-picture', formData);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Upload failed');
-      }
+      // Axios automatically throws errors for non-2xx status codes
+      // If we reach here, the request was successful
+      const data = response.data;
 
       setUser(prev => ({
         ...prev,
@@ -194,7 +197,14 @@ export const AuthProvider = ({ children }) => {
 
       return data;
     } catch (error) {
-      throw error;
+      // Handle Axios error response
+      if (error.response) {
+        const data = error.response.data;
+        throw new Error(data.message || 'Upload failed');
+      }
+      
+      // Handle network errors
+      throw new Error(error.message || 'Network error');
     }
   };
 

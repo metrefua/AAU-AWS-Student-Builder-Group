@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // Removed unused imports
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -28,6 +28,7 @@ function Auth({ theme }) {
     password: '',
     confirmPassword: ''
   });
+  const [fieldErrors, setFieldErrors] = useState({});
   
   const { loginWithRedirect, isAuthenticated: isAuth0Authenticated, user: auth0User } = useAuth0();
   const { user: authUser, login, signup } = useAuth();
@@ -46,6 +47,7 @@ function Auth({ theme }) {
       [e.target.name]: e.target.value
     });
     setError('');
+    setFieldErrors({ ...fieldErrors, [e.target.name]: undefined });
   };
 
   const handleResetInputChange = (e) => {
@@ -59,32 +61,43 @@ function Auth({ theme }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setFieldErrors({});
     setIsLoading(true);
 
     try {
       if (!isLogin && formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match');
+        setFieldErrors({ password: 'Passwords do not match', confirmPassword: 'Passwords do not match' });
+        setIsLoading(false);
+        return;
       }
 
-      const { confirmPassword, ...authData } = formData;
+      const authData = { ...formData };
+      delete authData.confirmPassword;
       const authPayload = { ...authData, rememberMe };
       
       const timeoutPromise = new Promise((_, reject) => 
         setTimeout(() => reject(new Error('Connection timeout - backend may be starting up')), 5000)
       );
       
-      let result;
       if (isLogin) {
-        result = await Promise.race([login(authPayload), timeoutPromise]);
+        await Promise.race([login(authPayload), timeoutPromise]);
       } else {
-        result = await Promise.race([signup(authPayload), timeoutPromise]);
+        await Promise.race([signup(authPayload), timeoutPromise]);
       }
       
       setIsLoading(false);
       navigate('/', { replace: true });
       
     } catch (err) {
-      setError(err.message || 'Authentication failed');
+      console.log("here 3", err);
+      if (err.fieldErrors) {
+        // fieldErrors is an object: { email: "msg", password: "msg", ... }
+        setFieldErrors(err.fieldErrors);
+        setError('');
+      } else {
+        setError(err.response?.data?.message || err.message || 'Authentication failed');
+        setFieldErrors({});
+      }
       setIsLoading(false);
     }
   };
@@ -141,7 +154,7 @@ function Auth({ theme }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/verify-email', {
+      const response = await fetch('http://localhost:5001/api/auth/verify-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +186,7 @@ function Auth({ theme }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/verify-reset-code', {
+      const response = await fetch('http://localhost:5001/api/auth/verify-reset-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -209,7 +222,7 @@ function Auth({ theme }) {
         throw new Error('Passwords do not match');
       }
 
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await fetch('http://localhost:5001/api/auth/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -250,19 +263,19 @@ function Auth({ theme }) {
     try {
       setIsLoading(true);
       await loginWithRedirect({
-        appState: { returnTo: window.location.origin },
+        appState: { returnTo: window.location.origin }, // only returnTo goes here
         authorizationParams: {
           connection: 'google-oauth2',
-          response_type: "code",
-          code_challenge_method: "S256",
-          prompt: "login"
-        }
+          audience: "https://myapi.com", // correct place for audience
+        },
       });
-    } catch (error) {
+    } catch {
       setError('Social login failed. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
+  
 
   const resetForgotPassword = () => {
     setForgotPasswordStep(null);
@@ -299,7 +312,7 @@ function Auth({ theme }) {
       >
         <div className="auth-header">
           <motion.img 
-            src={theme === 'light' ? "/aws-logo-dark.svg" : "/aws-logo-light.svg"}
+            src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"}
             alt="AWS Logo" 
             className="auth-logo"
             initial={{ scale: 0.9 }}
@@ -377,6 +390,7 @@ function Auth({ theme }) {
                   onChange={handleResetInputChange}
                   required
                 />
+                {fieldErrors.identifier && <div className="error-message">{fieldErrors.identifier}</div>}
               </div>
               <motion.button
                 type="submit"
@@ -420,6 +434,7 @@ function Auth({ theme }) {
                   onChange={handleResetInputChange}
                   required
                 />
+                {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
               </div>
               <motion.button
                 type="submit"
@@ -461,6 +476,7 @@ function Auth({ theme }) {
                   pattern="[0-9]{6}"
                   required
                 />
+                {fieldErrors.code && <div className="error-message">{fieldErrors.code}</div>}
               </div>
               <motion.button
                 type="submit"
@@ -501,6 +517,7 @@ function Auth({ theme }) {
                   minLength="8"
                   required
                 />
+                {fieldErrors.newPassword && <div className="error-message">{fieldErrors.newPassword}</div>}
               </div>
               <div className="form-group">
                 <input
@@ -512,6 +529,7 @@ function Auth({ theme }) {
                   minLength="8"
                   required
                 />
+                {fieldErrors.confirmPassword && <div className="error-message">{fieldErrors.confirmPassword}</div>}
               </div>
               <motion.button
                 type="submit"
@@ -558,6 +576,7 @@ function Auth({ theme }) {
                         onChange={handleInputChange}
                         required={!isLogin}
                       />
+                      {fieldErrors.fullName && <div className="error-message">{fieldErrors.fullName}</div>}
                     </div>
                     <div className="form-group">
                       <input
@@ -570,6 +589,7 @@ function Auth({ theme }) {
                         pattern="[a-zA-Z0-9_]+"
                         title="Username can only contain letters, numbers, and underscores"
                       />
+                      {fieldErrors.username && <div className="error-message">{fieldErrors.username}</div>}
                     </div>
                   </motion.div>
                 )}
@@ -584,6 +604,7 @@ function Auth({ theme }) {
                   onChange={handleInputChange}
                   required
                 />
+                {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
               </div>
 
               <div className="form-group">
@@ -595,6 +616,7 @@ function Auth({ theme }) {
                   onChange={handleInputChange}
                   required
                 />
+                {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
               </div>
 
               <AnimatePresence mode="wait">
@@ -614,6 +636,7 @@ function Auth({ theme }) {
                         onChange={handleInputChange}
                         required={!isLogin}
                       />
+                      {fieldErrors.confirmPassword && <div className="error-message">{fieldErrors.confirmPassword}</div>}
                     </div>
                   </motion.div>
                 )}

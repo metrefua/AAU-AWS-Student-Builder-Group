@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './styles/Account.css';
+import { publicAxios } from '../utils/axios';
 
 function Account({ theme, toggleTheme }) {
   const [activeSection, setActiveSection] = useState('profile');
@@ -52,6 +53,7 @@ function Account({ theme, toggleTheme }) {
         email: currentUser.email || '',
         wantsEmails: currentUser.wantsEmails || false
       };
+      console.log(currentUser);
       setFormData(userData);
       setOriginalData(userData);
       setProfileImage(currentUser.picture || currentUser.profilePicture || '/account.svg');
@@ -191,14 +193,7 @@ function Account({ theme, toggleTheme }) {
 
     try {
       if (field === 'username') {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/auth/check-username`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ username: formData.username })
-        });
+        const response = await publicAxios.post('/auth/check-username', { username: formData.username });
         
         const data = await response.json();
         if (!response.ok) {

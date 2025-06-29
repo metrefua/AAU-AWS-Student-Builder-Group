@@ -123,7 +123,7 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
         transition={{ duration: 0.6 }}
       >
         <img 
-          src={theme === 'light' ? "/aws-logo-dark.svg" : "/aws-logo-light.svg"} 
+          src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} 
           alt="AWS Logo" 
           className="aws-logo" 
         />

@@ -51,25 +51,30 @@ function containsProfanity(input) {
 
 exports.signup = async (req, res) => {
   try {
+    console.log(req.body);
+
     const errors = validationResult(req);
+    console.log(errors.isEmpty());
     if (!errors.isEmpty()) {
+    
       return res.status(400).json({ errors: errors.array() });
     }
-
+    
     const { fullName, email, password, username: providedUsername, rememberMe } = req.body;
-
+    
     let existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: 'Email already exists' });
+      return res.status(400).json({ message: 'Email already exists' });
     }
-
+    
+    console.log("here");
     if (providedUsername) {
       const existingUsername = await User.findOne({ username: providedUsername });
       if (existingUsername) {
-        return res.status(400).json({ error: 'Username already exists' });
+        console.log("here 2");
+        return res.status(400).json({ message: 'Username already exists' });
       }
     }
-
     const fieldsToCheck = [
       { name: 'username', value: providedUsername },
       { name: 'full name', value: fullName },
@@ -316,8 +321,8 @@ exports.forgotPassword = async (req, res) => {
           'No account found with this username.'
       });
     }
-
-    if (user.auth0Id) {
+    console.log(user);
+    if (user?.auth0Id) {
       return res.status(400).json({
         error: 'This account uses Google sign-in. Please use the "Continue with Google" option to sign in.'
       });

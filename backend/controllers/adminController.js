@@ -364,8 +364,8 @@ exports.getPublicEvents = async (req, res) => {
     .sort({ date: 1 })
     .limit(limit);
 
-    console.log(`Found ${events.length} public events`);
-    console.log('Event dates:', events.map(e => ({ title: e.title, date: e.date, isActive: e.isActive })));
+    // console.log(`Found ${events.length} public events`);
+    // console.log('Event dates:', events.map(e => ({ title: e.title, date: e.date, isActive: e.isActive })));
 
     res.json({
       events,

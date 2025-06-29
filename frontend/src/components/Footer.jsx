@@ -55,7 +55,7 @@ function Footer({ theme }) {
           viewport={{ once: true }}
         >
           <div className="footer-logo">
-            <img src={theme === 'light' ? "/aws-logo-dark.svg" : "/aws-logo-light.svg"} alt="AWS Logo" className="footer-aws-logo" />
+            <img src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} alt="AWS Logo" className="footer-aws-logo" />
             <h3>AAU AWS Cloud Computing Club</h3>
           </div>
           <p>Empowering students with cloud computing skills and connecting them to industry opportunities.</p>

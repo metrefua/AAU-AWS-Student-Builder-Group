@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SocialLinks from '../components/SocialLinks';
+import { publicAxios } from '../utils/axios';
 
 function Landing({ theme, toggleTheme }) {
   const [activeSection, setActiveSection] = useState('home');
@@ -17,29 +18,12 @@ function Landing({ theme, toggleTheme }) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        setLoading(true);
-        console.log('Fetching events from:', 'http://localhost:5001/api/events/public?limit=6');
+        setLoading(true);        
+        const response = await publicAxios.get('/events/public?limit=6');
         
-        const response = await fetch('http://localhost:5001/api/events/public?limit=6', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Events data:', data);
-          setEvents(data.events || []);
-        } else {
-          console.error('Failed to fetch events:', response.status);
-          const errorText = await response.text();
-          console.error('Error response:', errorText);
-          setEvents([]);
-        }
+        // Axios automatically throws errors for non-2xx status codes
+        // If we reach here, the request was successful
+        setEvents(response.data.events || []);
       } catch (error) {
         console.error('Error fetching events:', error);
         setEvents([]);
@@ -51,7 +35,7 @@ function Landing({ theme, toggleTheme }) {
     fetchEvents();
   }, []);
 
-  // Intersection Observer for sections
+  // Intersection Observer for sectionsF
   useEffect(() => {
     const observers = [];
     const sections = ['home', 'about', 'events', 'resources'];
@@ -154,7 +138,7 @@ function Landing({ theme, toggleTheme }) {
             transition={{ delay: 0.3, duration: 0.8 }}
           >
             <img 
-              src={theme === 'light' ? "/file.svg" : "/aws-logo-light.svg"} 
+              src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} 
               alt="AWS Logo" 
               className="hero-logo" 
             />
