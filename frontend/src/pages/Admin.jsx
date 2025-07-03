@@ -9,6 +9,7 @@ import EventManagement from '../components/admin/EventManagement';
 import DashboardStats from '../components/admin/DashboardStats';
 import './styles/Admin.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 const Admin = ({ theme, toggleTheme }) => {
   const { user, loading: authLoading } = useAuth();
   const { showToast } = useToast();
@@ -50,7 +51,7 @@ const Admin = ({ theme, toggleTheme }) => {
   const fetchDashboardStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/admin/dashboard/stats', {
+      const response = await fetch(`${API_BASE_URL}/admin/dashboard/stats`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

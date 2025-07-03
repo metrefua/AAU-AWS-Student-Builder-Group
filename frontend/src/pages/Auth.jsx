@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import './styles/Auth.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 function Auth({ theme }) {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState('');
@@ -113,7 +114,7 @@ function Auth({ theme }) {
       );
       
       const response = await Promise.race([
-        fetch('http://localhost:5001/api/auth/forgot-password', {
+        fetch(`${API_BASE_URL}/auth/forgot-password`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -154,7 +155,7 @@ function Auth({ theme }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5001/api/auth/verify-email', {
+      const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -186,7 +187,7 @@ function Auth({ theme }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5001/api/auth/verify-reset-code', {
+      const response = await fetch(`${API_BASE_URL}/auth/verify-reset-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -222,7 +223,7 @@ function Auth({ theme }) {
         throw new Error('Passwords do not match');
       }
 
-      const response = await fetch('http://localhost:5001/api/auth/reset-password', {
+      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

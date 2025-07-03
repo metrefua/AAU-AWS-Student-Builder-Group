@@ -26,7 +26,7 @@ const EventManagement = () => {
     imageUrl: '',
     registrationLink: ''
   });
-
+const API_BASE_URL = import.meta.env.VITE_API_URL 
   useEffect(() => {
     fetchEvents();
   }, [currentPage, searchTerm, typeFilter, statusFilter]);
@@ -45,7 +45,7 @@ const EventManagement = () => {
       if (typeFilter) params.append('type', typeFilter);
       if (statusFilter !== '') params.append('isActive', statusFilter);
 
-      const response = await fetch(`http://localhost:5001/api/admin/events?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/events?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -71,7 +71,7 @@ const EventManagement = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/admin/events', {
+      const response = await fetch(`${API_BASE_URL}/admin/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const EventManagement = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5001/api/admin/events/${selectedEvent._id}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/events/${selectedEvent._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const EventManagement = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5001/api/admin/events/${eventId}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/events/${eventId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

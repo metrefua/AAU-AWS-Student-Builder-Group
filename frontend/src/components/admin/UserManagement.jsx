@@ -3,7 +3,7 @@ import { useToast } from '../../context/ToastContext';
 import './styles/AdminComponents.css';
 import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
 import { MdDelete } from "react-icons/md";
-
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 const UserManagement = () => {
   const { showToast } = useToast();
   const [users, setUsers] = useState([]);
@@ -33,7 +33,7 @@ const UserManagement = () => {
       if (searchTerm) params.append('search', searchTerm);
       if (roleFilter) params.append('role', roleFilter);
 
-      const response = await fetch(`http://localhost:5001/api/admin/users?${params}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/users?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -58,7 +58,7 @@ const UserManagement = () => {
   const handleRoleChange = async (userId, newRole) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5001/api/admin/users/${userId}/role`, {
+      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const UserManagement = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
