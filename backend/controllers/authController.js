@@ -354,7 +354,6 @@ exports.forgotPassword = async (req, res) => {
     });
   }
 };
-
 exports.verifyEmail = async (req, res) => {
   try {
     const { username, email } = req.body;

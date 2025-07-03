@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '../../context/ToastContext';
 import './styles/AdminComponents.css';
+import { HiMiniArrowTopRightOnSquare } from "react-icons/hi2";
+import { MdDelete } from "react-icons/md";
+
 const UserManagement = () => {
   const { showToast } = useToast();
   const [users, setUsers] = useState([]);
@@ -209,14 +212,14 @@ const UserManagement = () => {
                           className="action-btn view"
                           title="View Details"
                         >
-                          👁️
+                          <HiMiniArrowTopRightOnSquare />
                         </button>
                         <button
                           onClick={() => handleDeleteUser(user._id, user.fullName)}
                           className="action-btn delete"
                           title="Delete User"
                         >
-                          🗑️
+                          <MdDelete />
                         </button>
                       </div>
                     </td>

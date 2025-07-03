@@ -17,6 +17,11 @@ publicAxiosInstance.interceptors.request.use(
     if (config.data) {
       config.data = sanitizeData(config.data);
     }
+    // add token from localStorage if it exists
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`; // Set the Authorization header with the token
+    }
     return config;
   },
   (error) => {

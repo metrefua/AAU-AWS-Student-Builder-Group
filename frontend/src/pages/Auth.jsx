@@ -113,7 +113,7 @@ function Auth({ theme }) {
       );
       
       const response = await Promise.race([
-        fetch('/api/auth/forgot-password', {
+        fetch('http://localhost:5001/api/auth/forgot-password', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
