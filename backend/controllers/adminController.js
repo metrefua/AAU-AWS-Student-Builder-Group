@@ -185,11 +185,8 @@ exports.getDashboardStats = async (req, res) => {
 
 // Event Management Controllers
 exports.createEvent = async (req, res) => {
+  console.log(req.body)
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
 
     const eventData = {
       ...req.body,
@@ -212,7 +209,6 @@ exports.createEvent = async (req, res) => {
     });
   }
 };
-
 exports.getAllEvents = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;

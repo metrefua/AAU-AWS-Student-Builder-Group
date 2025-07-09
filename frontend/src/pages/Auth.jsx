@@ -77,7 +77,7 @@ function Auth({ theme }) {
       const authPayload = { ...authData, rememberMe };
       
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Connection timeout - backend may be starting up')), 5000)
+        setTimeout(() => reject(new Error('Connection timeout - backend may be starting up')), 10000)
       );
       
       if (isLogin) {
@@ -90,7 +90,6 @@ function Auth({ theme }) {
       navigate('/', { replace: true });
       
     } catch (err) {
-      console.log("here 3", err);
       if (err.fieldErrors) {
         // fieldErrors is an object: { email: "msg", password: "msg", ... }
         setFieldErrors(err.fieldErrors);
@@ -252,7 +251,7 @@ function Auth({ theme }) {
         needsEmailVerification: false
       });
       setError('');
-      showToast('Password reset successful! You can now sign in with your new password.', 'success', 5000);
+      showToast('Password reset successful! You can now sign in with your new password.', 'success', 10000);
     } catch (err) {
       setError(err.message);
     } finally {

@@ -53,7 +53,7 @@ function Account({ theme, toggleTheme }) {
         email: currentUser.email || '',
         wantsEmails: currentUser.wantsEmails || false
       };
-      console.log(currentUser);
+    
       setFormData(userData);
       setOriginalData(userData);
       setProfileImage(currentUser.picture || currentUser.profilePicture || '/account.svg');

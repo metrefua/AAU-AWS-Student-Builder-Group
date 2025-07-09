@@ -23,7 +23,6 @@ const EventManagement = () => {
     type: 'meetup',
     maxAttendees: '',
     isActive: true,
-    imageUrl: '',
     registrationLink: ''
   });
 const API_BASE_URL = import.meta.env.VITE_API_URL 
@@ -161,7 +160,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
       type: event.type,
       maxAttendees: event.maxAttendees || '',
       isActive: event.isActive,
-      imageUrl: event.imageUrl || '',
       registrationLink: event.registrationLink || ''
     });
     setShowEditModal(true);
@@ -177,7 +175,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
       type: 'meetup',
       maxAttendees: '',
       isActive: true,
-      imageUrl: '',
       registrationLink: ''
     });
     setSelectedEvent(null);
@@ -437,14 +434,14 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
                   />
                 </div>
               </div>
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label>Image URL</label>
                 <input
                   type="url"
                   value={formData.imageUrl}
                   onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
                 />
-              </div>
+              </div> */}
               <div className="form-group">
                 <label>Registration Link</label>
                 <input

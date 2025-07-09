@@ -51,27 +51,22 @@ function containsProfanity(input) {
 
 exports.signup = async (req, res) => {
   try {
-    console.log(req.body);
-
     const errors = validationResult(req);
-    console.log(errors.isEmpty());
     if (!errors.isEmpty()) {
     
       return res.status(400).json({ errors: errors.array() });
     }
     
-    const { fullName, email, password, username: providedUsername, rememberMe } = req.body;
+    const { fullName, email, password, role, username: providedUsername, rememberMe } = req.body;
     
     let existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already exists' });
     }
     
-    console.log("here");
     if (providedUsername) {
       const existingUsername = await User.findOne({ username: providedUsername });
       if (existingUsername) {
-        console.log("here 2");
         return res.status(400).json({ message: 'Username already exists' });
       }
     }
@@ -95,7 +90,8 @@ exports.signup = async (req, res) => {
       username,
       fullName,
       email,
-      password
+      password,
+      role: role || 'user',
     });
 
     await user.save();

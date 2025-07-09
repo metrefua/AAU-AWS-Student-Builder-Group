@@ -5,14 +5,14 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Event title is required'],
     trim: true,
-    minlength: [3, 'Event title must be at least 3 characters long'],
+    minlength: [1, 'Event title must be at least 3 characters long'],
     maxlength: [100, 'Event title cannot be more than 100 characters']
   },
   description: {
     type: String,
     required: [true, 'Event description is required'],
     trim: true,
-    minlength: [10, 'Event description must be at least 10 characters long'],
+    minlength: [1, 'Event description must be at least 10 characters long'],
     maxlength: [1000, 'Event description cannot be more than 1000 characters']
   },
   date: {
@@ -43,10 +43,6 @@ const eventSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
-  },
-  imageUrl: {
-    type: String,
-    default: null
   },
   registrationLink: {
     type: String,
