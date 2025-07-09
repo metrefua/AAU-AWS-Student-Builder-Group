@@ -557,14 +557,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL
                 </div>
               </div>
               <div className="form-group">
-                <label>Image URL</label>
-                <input
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-                />
-              </div>
-              <div className="form-group">
                 <label>Registration Link</label>
                 <input
                   type="url"

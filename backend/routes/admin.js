@@ -47,52 +47,7 @@ router.get('/events/:id', [
   param('id').isMongoId().withMessage('Invalid event ID')
 ], adminController.getEventById);
 
-router.put('/events/:id', [
-  param('id').isMongoId().withMessage('Invalid event ID'),
-  body('title')
-    .optional()
-    .trim()
-    .isLength({ min: 3, max: 100 })
-    .withMessage('Event title must be between 3 and 100 characters'),
-  body('description')
-    .optional()
-    .trim()
-    .isLength({ min: 10, max: 1000 })
-    .withMessage('Event description must be between 10 and 1000 characters'),
-  body('date')
-    .optional()
-    .isISO8601()
-    .withMessage('Event date must be a valid date'),
-  body('time')
-    .optional()
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage('Event time must be in HH:MM format'),
-  body('location')
-    .optional()
-    .trim()
-    .isLength({ min: 1, max: 200 })
-    .withMessage('Event location must be between 1 and 200 characters'),
-  body('type')
-    .optional()
-    .isIn(['workshop', 'meetup', 'hackathon', 'webinar', 'conference', 'other'])
-    .withMessage('Event type must be one of: workshop, meetup, hackathon, webinar, conference, other'),
-  body('maxAttendees')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Maximum attendees must be a positive integer'),
-  body('isActive')
-    .optional()
-    .isBoolean()
-    .withMessage('isActive must be a boolean'),
-  body('imageUrl')
-    .optional()
-    .isURL()
-    .withMessage('Image URL must be a valid URL'),
-  body('registrationLink')
-    .optional()
-    .isURL()
-    .withMessage('Registration link must be a valid URL')
-], adminController.updateEvent);
+router.put('/events/:id', adminController.updateEvent);
 
 router.delete('/events/:id', [
   param('id').isMongoId().withMessage('Invalid event ID')
