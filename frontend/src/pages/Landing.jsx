@@ -68,8 +68,12 @@ function Landing({ theme, toggleTheme }) {
     }
   };
 
-  const handleJoinClick = () => {
-    navigate('/auth');
+  // const handleJoinClick = () => {
+  //   navigate('/auth');
+  // };
+
+   const handleSocialClick = (url) => {
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const formatDate = (dateString) => {
@@ -177,9 +181,15 @@ function Landing({ theme, toggleTheme }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.1, duration: 0.8 }}
           >
-            <button className="cta-primary pulse-animation" onClick={handleJoinClick}>
-              Join the Club
-            </button>
+            <button
+  className="cta-primary pulse-animation"
+  onClick={() =>
+    handleSocialClick("https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/")
+  }
+>
+  Join the Club
+</button>
+
             <button className="cta-secondary" onClick={() => scrollToSection('about')}>
               Learn More
             </button>
@@ -490,8 +500,8 @@ function Landing({ theme, toggleTheme }) {
               <div className="testimonial-author">
                 <img src="/avatar.svg" alt="Jane Doe" />
                 <div>
-                  <strong>Jane Doe</strong>
-                  <span>Computer Science, '22</span>
+                  <strong>Ephraim Debel</strong>
+                  <span>Software Engineer</span>
                 </div>
               </div>
             </div>
@@ -509,9 +519,12 @@ function Landing({ theme, toggleTheme }) {
         >
           <h2>Ready to start your cloud journey?</h2>
           <p>Join our community today and get access to workshops, networking events, and resources to accelerate your career.</p>
-          <button className="join-button pulse-animation" onClick={handleJoinClick}>
+          <button className="join-button pulse-animation"  onClick={() =>
+    handleSocialClick("https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/")
+  }>
             Join the Club
           </button>
+
         </motion.div>
       </section>
       <SocialLinks />

@@ -42,16 +42,16 @@ const SocialSection = () => {
           style={{ cursor: "pointer", width: "40px", margin: "0 6px" }}
           onClick={() =>
             handleSocialClick(
-              "https://www.linkedin.com/company/aws-cloud-club-wayne-state-university/"
+              "https://www.linkedin.com/company/aws-cloud-clubs-addis-ababa-university/"
             )
           }
         />
-        <img
+        {/* <img
           src="/github.svg"
           alt="GitHub"
           style={{ cursor: "pointer", width: "40px", margin: "0 6px" }}
           onClick={() => handleSocialClick("https://github.com/AWS-WSU")}
-        />
+        /> */}
         <img
           src="/meetup4.png"
           alt="Meetup"
