@@ -4,10 +4,6 @@
 
 # Addis Ababa University - AWS Student Hub
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/2057d3aa-a3e2-4566-b2f6-b89b0dd165f5" width="300" alt="Student Hub Banner"/>
-</p>
-
 ## Development Setup
 
 The app uses `concurrently` to run both the frontend and the backend together.
