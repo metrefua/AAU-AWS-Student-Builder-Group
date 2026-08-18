@@ -48,6 +48,14 @@ const eventSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  meetupLink: {
+    type: String,
+    default: null
+  },
+  imageUrl: {
+    type: String,
+    default: null
+  },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
