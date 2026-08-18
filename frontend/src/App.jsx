@@ -8,6 +8,8 @@ import Landing from './pages/Landing';
 import Auth from './pages/Auth';
 import Account from './pages/Account';
 import Admin from './pages/Admin';
+import Certifications from './pages/Certifications';
+import Resources from './pages/Resources';
 import EventManagement from './components/admin/EventManagement';
 import UserManagement from './components/admin/UserManagement';
 import './App.css';
@@ -40,7 +42,9 @@ function AppContent() {
         location.pathname !== '/account' && 
         location.pathname !== '/admin' &&
         location.pathname !== '/admin/events' &&
-        location.pathname !== '/admin/users') {
+        location.pathname !== '/admin/users' &&
+        location.pathname !== '/certifications' &&
+        location.pathname !== '/resources') {
       navigate('/', { replace: true });
     }
   }, [location, navigate]);
@@ -70,6 +74,14 @@ function AppContent() {
         <Route 
           path="/admin/users" 
           element={<UserManagement theme={theme} toggleTheme={toggleTheme} />} 
+        />
+        <Route 
+          path="/certifications" 
+          element={<Certifications theme={theme} toggleTheme={toggleTheme} />} 
+        />
+        <Route 
+          path="/resources" 
+          element={<Resources theme={theme} toggleTheme={toggleTheme} />} 
         />
       </Routes>
     </div>
