@@ -5,14 +5,27 @@ import './styles/Footer.css';
 
 function Footer({ theme }) {
   const [email, setEmail] = useState('');
+  const [messageText, setMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' }); // type: 'success', 'error', ''
-  
+
+  const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!email.trim()) {
       setMessage({ text: 'Please enter your email address', type: 'error' });
+      return;
+    }
+
+    if (!isValidEmail(email.trim())) {
+      setMessage({ text: 'Please enter a valid email address', type: 'error' });
+      return;
+    }
+
+    if (messageText.length > 1000) {
+      setMessage({ text: 'Message must be 1000 characters or fewer', type: 'error' });
       return;
     }
 
@@ -20,11 +33,12 @@ function Footer({ theme }) {
     setMessage({ text: '', type: '' });
 
     try {
-      const response = await newsletterAPI.subscribe(email);
+      const response = await newsletterAPI.subscribe(email.trim(), messageText.trim());
       
       if (response.success) {
         setMessage({ text: response.message, type: 'success' });
-        setEmail(''); // Clear the input on success
+        setEmail(''); // Clear the inputs on success
+        setMessageText('');
       } else {
         setMessage({ text: response.message || 'Something went wrong', type: 'error' });
       }
@@ -99,7 +113,7 @@ function Footer({ theme }) {
           viewport={{ once: true }}
         >
           <h3>Newsletter</h3>
-          <p>Stay updated with our latest events and opportunities</p>
+          <p>Stay updated with our latest events and opportunities, or send us a message</p>
           <div className="newsletter">
             <form className="newsletter-form" onSubmit={handleSubmit}>
               <input 
@@ -109,6 +123,15 @@ function Footer({ theme }) {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 required
+              />
+              <textarea
+                className="newsletter-message-input"
+                placeholder="Your message (optional)"
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                disabled={isLoading}
+                maxLength={1000}
+                rows={3}
               />
               <motion.button 
                 type="submit"
@@ -120,7 +143,7 @@ function Footer({ theme }) {
                   cursor: isLoading ? 'not-allowed' : 'pointer'
                 }}
               >
-                {isLoading ? 'Joining...' : 'Join'}
+                {isLoading ? 'Sending...' : 'Submit'}
               </motion.button>
             </form>
             {message.text && (
@@ -130,6 +153,7 @@ function Footer({ theme }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
+                role={message.type === 'error' ? 'alert' : 'status'}
               >
                 {message.text}
               </motion.div>
