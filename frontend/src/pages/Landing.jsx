@@ -7,6 +7,25 @@ import Footer from '../components/Footer';
 import SocialLinks from '../components/SocialLinks';
 import { publicAxios } from '../utils/axios';
 
+// Temporary fallback so the site always has at least one event to show
+// while the Meetup -> Backend -> Database pipeline is being connected.
+// Once the backend returns real events, this is never used - remove it
+// once the database is seeded with live events.
+const FALLBACK_EVENTS = [
+  {
+    _id: 'fallback-aws-meetup-2026-08-15',
+    title: 'AWS Cloud Club Meetup',
+    description: 'Join us for our upcoming community meetup - connect with fellow cloud enthusiasts, hear lightning talks, and get updates on certification study groups.',
+    date: '2026-08-15',
+    time: '17:00',
+    location: 'Addis Ababa University, Computer Science Building',
+    type: 'meetup',
+    registrationLink: 'https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/',
+    meetupLink: 'https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/',
+    imageUrl: null
+  }
+];
+
 function Landing({ theme, toggleTheme }) {
   const [activeSection, setActiveSection] = useState('home');
   const [events, setEvents] = useState([]);
@@ -23,10 +42,13 @@ function Landing({ theme, toggleTheme }) {
         
         // Axios automatically throws errors for non-2xx status codes
         // If we reach here, the request was successful
-        setEvents(response.data.events || []);
+        const fetchedEvents = response.data.events || [];
+        setEvents(fetchedEvents.length > 0 ? fetchedEvents : FALLBACK_EVENTS);
       } catch (error) {
         console.error('Error fetching events:', error);
-        setEvents([]);
+        // Backend/database not reachable yet - show the fallback event
+        // instead of an empty section.
+        setEvents(FALLBACK_EVENTS);
       } finally {
         setLoading(false);
       }
@@ -202,7 +224,7 @@ function Landing({ theme, toggleTheme }) {
             transition={{ delay: 1.5, duration: 0.8 }}
             onClick={() => scrollToSection('about')}
           >
-            <span>Explore</span>
+            <span>Scroll</span>
             <div className="scroll-arrow"></div>
           </motion.div>
         </motion.div>
@@ -352,6 +374,14 @@ function Landing({ theme, toggleTheme }) {
                   </div>
                 </div>
                 <div className="event-content">
+                  {event.imageUrl && (
+                    <img
+                      src={event.imageUrl}
+                      alt={event.title}
+                      className="event-image"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  )}
                   <div style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between', 
@@ -381,16 +411,28 @@ function Landing({ theme, toggleTheme }) {
                     )}
                   </div>
                   <p>{event.description}</p>
-                  {event.registrationLink && (
-                    <a 
-                      href={event.registrationLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="event-button"
-                    >
-                      Register Now
-                    </a>
-                  )}
+                  <div className="event-actions-row">
+                    {event.registrationLink && (
+                      <a 
+                        href={event.registrationLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="event-button"
+                      >
+                        Register Now
+                      </a>
+                    )}
+                    {event.meetupLink && event.meetupLink !== event.registrationLink && (
+                      <a 
+                        href={event.meetupLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="event-link-secondary"
+                      >
+                        View on Meetup
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -425,7 +467,12 @@ function Landing({ theme, toggleTheme }) {
           transition={{ duration: 0.5 }}
           viewport={{ once: true, amount: 0.1 }}
         >
-          <button className="view-all-button">View All Events</button>
+          <button
+            className="view-all-button"
+            onClick={() => handleSocialClick('https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/events/')}
+          >
+            View All Events
+          </button>
         </motion.div>
       </section>
 
@@ -446,13 +493,15 @@ function Landing({ theme, toggleTheme }) {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true, amount: 0.3 }}
+            onClick={() => window.open('https://aws.amazon.com/free/', '_blank', 'noopener,noreferrer')}
+            style={{ cursor: 'pointer' }}
           >
             <div className="resource-icon">
               <i className="fas fa-cloud-upload-alt"></i>
             </div>
             <h3>AWS Free Tier Access</h3>
             <p>Get started with AWS services at no cost through our educational partnership.</p>
-            <a href="#" className="resource-link">Access Now <i className="fas fa-arrow-right"></i></a>
+            <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener noreferrer" className="resource-link">Access Now <i className="fas fa-arrow-right"></i></a>
           </motion.div>
           
           <motion.div 
@@ -461,13 +510,15 @@ function Landing({ theme, toggleTheme }) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true, amount: 0.3 }}
+            onClick={() => navigate('/certifications')}
+            style={{ cursor: 'pointer' }}
           >
             <div className="resource-icon">
               <i className="fas fa-certificate"></i>
             </div>
             <h3>Certification Vouchers</h3>
             <p>Active members may qualify for discounted AWS certification exam vouchers.</p>
-            <a href="#" className="resource-link">Learn More <i className="fas fa-arrow-right"></i></a>
+            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/certifications'); }} className="resource-link">Learn More <i className="fas fa-arrow-right"></i></a>
           </motion.div>
           
           <motion.div 
@@ -476,13 +527,15 @@ function Landing({ theme, toggleTheme }) {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true, amount: 0.3 }}
+            onClick={() => navigate('/resources')}
+            style={{ cursor: 'pointer' }}
           >
             <div className="resource-icon">
               <i className="fas fa-book"></i>
             </div>
             <h3>Learning Materials</h3>
             <p>Access our curated collection of guides, tutorials, and practice exercises.</p>
-            <a href="#" className="resource-link">Browse Library <i className="fas fa-arrow-right"></i></a>
+            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/resources'); }} className="resource-link">Browse Library <i className="fas fa-arrow-right"></i></a>
           </motion.div>
         </div>
         

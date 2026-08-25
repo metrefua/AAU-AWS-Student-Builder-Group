@@ -1,0 +1,38 @@
+.info-page-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+}
+
+.info-page-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 2rem 4rem;
+}
+
+.info-page-content .back-button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+  font-family: var(--font-family);
+}
+
+.info-page-content .back-button:hover {
+  color: var(--accent);
+}
+
+.info-page-content .resources-container {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .info-page-content {
+    padding: 100px 1.25rem 3rem;
+  }
+}

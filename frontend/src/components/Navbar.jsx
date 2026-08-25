@@ -165,7 +165,14 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
           >
-            <a onClick={() => scrollToSection('resources')}>Resources</a>
+            <a onClick={() => navigate('/resources')}>Resources</a>
+          </motion.li>
+          <motion.li 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
+          >
+            <a onClick={() => navigate('/certifications')}>Certifications</a>
           </motion.li>
         </ul>
       </nav>
@@ -377,7 +384,14 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.4 }}
               >
-                <a onClick={() => { scrollToSection('resources'); toggleMenu(); }}>Resources</a>
+                <a onClick={() => { navigate('/resources'); toggleMenu(); }}>Resources</a>
+              </motion.li>
+              <motion.li 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ delay: 0.45 }}
+              >
+                <a onClick={() => { navigate('/certifications'); toggleMenu(); }}>Certifications</a>
               </motion.li>
               {isAdmin && (
                 <motion.li 

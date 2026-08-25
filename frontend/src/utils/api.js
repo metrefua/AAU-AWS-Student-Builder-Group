@@ -53,10 +53,10 @@ const apiRequest = async (endpoint, options = {}) => {
 
 // Newsletter API functions
 export const newsletterAPI = {
-  subscribe: async (email) => {
+  subscribe: async (email, message = '') => {
     return apiRequest('/newsletter/subscribe', {
       method: 'POST',
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, message }),
     });
   }
 };

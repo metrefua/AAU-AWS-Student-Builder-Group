@@ -20,6 +20,19 @@ const createSampleEvents = async () => {
     // Sample events data
     const sampleEvents = [
       {
+        title: 'AWS Cloud Club Meetup',
+        description: 'Our next community meetup — connect with fellow cloud enthusiasts, hear lightning talks, and get updates on upcoming certification study groups.',
+        date: new Date('2026-08-15'),
+        time: '17:00',
+        location: 'Addis Ababa University, Computer Science Building',
+        type: 'meetup',
+        maxAttendees: 80,
+        isActive: true,
+        registrationLink: 'https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/',
+        meetupLink: 'https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/',
+        imageUrl: null
+      },
+      {
         title: 'AWS Cloud Practitioner Workshop',
         description: 'Join us for a hands-on workshop to learn the fundamentals of AWS Cloud Practitioner certification. We\'ll cover core AWS services, security, and best practices.',
         date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
