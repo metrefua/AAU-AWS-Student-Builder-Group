@@ -124,12 +124,12 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
       >
         <img 
           src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} 
-          alt="AWS Logo" 
+          alt="AWS Student Builder Group Logo" 
           className="aws-logo" 
         />
         <div className="logo-text">
           <h1>Addis Ababa University</h1>
-          <span className="accent-text">AWS Cloud Computing Club</span>
+          <span className="accent-text">AWS Student Builder Group</span>
         </div>
       </motion.div>
       
@@ -141,7 +141,7 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <a onClick={() => scrollToSection('home')}>Home</a>
+            <button type="button" onClick={() => scrollToSection('home')}>Home</button>
           </motion.li>
           <motion.li 
             className={activeSection === 'about' ? 'active' : ''}
@@ -149,7 +149,7 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <a onClick={() => scrollToSection('about')}>About</a>
+            <button type="button" onClick={() => scrollToSection('about')}>About</button>
           </motion.li>
           <motion.li 
             className={activeSection === 'events' ? 'active' : ''}
@@ -157,7 +157,7 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.3 }}
           >
-            <a onClick={() => scrollToSection('events')}>Events</a>
+            <button type="button" onClick={() => scrollToSection('events')}>Events</button>
           </motion.li>
           <motion.li 
             className={activeSection === 'resources' ? 'active' : ''}
@@ -165,14 +165,14 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
           >
-            <a onClick={() => navigate('/resources')}>Resources</a>
+            <button type="button" onClick={() => navigate('/resources')}>Resources</button>
           </motion.li>
           <motion.li 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.5 }}
           >
-            <a onClick={() => navigate('/certifications')}>Certifications</a>
+            <button type="button" onClick={() => navigate('/certifications')}>Certifications</button>
           </motion.li>
         </ul>
       </nav>
@@ -206,6 +206,8 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
               onClick={toggleAccountDropdown}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="Account menu"
+              aria-expanded={isAccountDropdownOpen}
             >
               <motion.img
                 src={profileImage}
@@ -240,7 +242,7 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
                       <strong>{getDisplayName(currentUser)}</strong>
                       <span>{currentUser?.email || ''}</span>
                       {isAdmin && (
-                        <span className="admin-badge">👑 Admin</span>
+                        <span className="admin-badge">Admin</span>
                       )}
                     </div>
                   </div>
@@ -340,7 +342,12 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
           </motion.div>
         </motion.button>
         
-        <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
+        <button
+          className="mobile-menu-toggle"
+          onClick={toggleMenu}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMenuOpen}
+        >
           <span></span>
           <span></span>
           <span></span>
@@ -356,42 +363,42 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <button className="close-menu" onClick={toggleMenu}>×</button>
+            <button className="close-menu" onClick={toggleMenu} aria-label="Close menu">×</button>
             <ul>
               <motion.li 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.1 }}
               >
-                <a onClick={() => { scrollToSection('home'); toggleMenu(); }}>Home</a>
+                <button type="button" onClick={() => { scrollToSection('home'); toggleMenu(); }}>Home</button>
               </motion.li>
               <motion.li 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.2 }}
               >
-                <a onClick={() => { scrollToSection('about'); toggleMenu(); }}>About</a>
+                <button type="button" onClick={() => { scrollToSection('about'); toggleMenu(); }}>About</button>
               </motion.li>
               <motion.li 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.3 }}
               >
-                <a onClick={() => { scrollToSection('events'); toggleMenu(); }}>Events</a>
+                <button type="button" onClick={() => { scrollToSection('events'); toggleMenu(); }}>Events</button>
               </motion.li>
               <motion.li 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.4 }}
               >
-                <a onClick={() => { navigate('/resources'); toggleMenu(); }}>Resources</a>
+                <button type="button" onClick={() => { navigate('/resources'); toggleMenu(); }}>Resources</button>
               </motion.li>
               <motion.li 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.45 }}
               >
-                <a onClick={() => { navigate('/certifications'); toggleMenu(); }}>Certifications</a>
+                <button type="button" onClick={() => { navigate('/certifications'); toggleMenu(); }}>Certifications</button>
               </motion.li>
               {isAdmin && (
                 <motion.li 
@@ -399,7 +406,7 @@ function Navbar({ theme, toggleTheme, activeSection, scrollToSection }) {
                   animate={{ opacity: 1, y: 0 }} 
                   transition={{ delay: 0.5 }}
                 >
-                  <a onClick={() => { navigate('/admin'); toggleMenu(); }}>👑 Admin Dashboard</a>
+                  <button type="button" onClick={() => { navigate('/admin'); toggleMenu(); }}>Admin Dashboard</button>
                 </motion.li>
               )}
             </ul>

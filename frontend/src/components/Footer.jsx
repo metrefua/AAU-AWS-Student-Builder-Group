@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { HiOutlineMail } from 'react-icons/hi';
 import { newsletterAPI } from '../utils/api';
 import './styles/Footer.css';
 
 function Footer({ theme }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -69,8 +72,8 @@ function Footer({ theme }) {
           viewport={{ once: true }}
         >
           <div className="footer-logo">
-            <img src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} alt="AWS Logo" className="footer-aws-logo" />
-            <h3>AAU AWS Cloud Computing Club</h3>
+            <img src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} alt="AWS Student Builder Group Logo" className="footer-aws-logo" />
+            <h3>AAU AWS Student Builder Group</h3>
           </div>
           <p>Empowering students with cloud computing skills and connecting them to industry opportunities.</p>
         </motion.div>
@@ -84,10 +87,10 @@ function Footer({ theme }) {
         >
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#events">Events</a></li>
-            <li><a href="#resources">Resources</a></li>
+            <li><button type="button" onClick={() => navigate('/#home')}>Home</button></li>
+            <li><button type="button" onClick={() => navigate('/#about')}>About Us</button></li>
+            <li><button type="button" onClick={() => navigate('/#events')}>Events</button></li>
+            <li><button type="button" onClick={() => navigate('/resources')}>Resources</button></li>
           </ul>
         </motion.div>
         
@@ -100,8 +103,8 @@ function Footer({ theme }) {
         >
           <h3>Contact Us</h3>
           <div className="contact-info">
-            <i className="fas fa-envelope"></i>
-            <span>awscloudclubs@aau.edu</span>
+            <HiOutlineMail aria-hidden="true" />
+            <a href="mailto:awscloudclubs@aau.edu">awscloudclubs@aau.edu</a>
           </div>
         </motion.div>
         
@@ -163,7 +166,7 @@ function Footer({ theme }) {
       </div>
       
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} Addis Ababa University AWS Cloud Computing Club</p>
+        <p>&copy; {new Date().getFullYear()} Addis Ababa University AWS Student Builder Group</p>
       </div>
     </footer>
   );

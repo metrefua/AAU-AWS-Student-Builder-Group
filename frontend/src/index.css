@@ -5,61 +5,117 @@
   box-sizing: border-box;
 }
 
-  @font-face {
-    font-family: 'RJ1';
-    src: url('./assets/fonts/RJ1.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'AmazonEmberDisplay';
+  src: url('./assets/fonts/AmazonEmberDisplay-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AmazonEmberDisplay';
+  src: url('./assets/fonts/AmazonEmberDisplay-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AmazonEmberDisplay';
+  src: url('./assets/fonts/AmazonEmberDisplay-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  /* Global variables */
-  --primary-color: #232f3e;
-  --secondary-color: #ff9900;
-  --text-color: #333;
-  --background-color: #f8f8f8;
-  --font-family: 'RJ1', 'Arial', sans-serif;
-  --font-weight: heavy;
+  /* ---------- Typography ---------- */
+  --font-family: 'AmazonEmberDisplay', 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+  --fs-xs: 0.8rem;
+  --fs-sm: 0.9rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.35rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: clamp(1.9rem, 3.2vw, 2.5rem);
+  --fs-3xl: clamp(2.4rem, 5vw, 3.5rem);
 
-  /* Light Theme Colors */
-  --light-bg-primary: #f8f9fa;
-  --light-bg-primary-rgb: 248, 249, 250;
+  /* ---------- Spacing scale ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* ---------- Radius scale (restrained, not pill-everything) ---------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px; /* reserved for true pills: badges, avatars, dots */
+
+  /* ---------- Shadow scale (subtle, not glowing) ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.14);
+
+  /* ---------- Motion ---------- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 0.15s var(--ease);
+  --transition-base: 0.25s var(--ease);
+
+  /* ---------- Light Theme Colors ---------- */
+  --light-bg-primary: #f7f8fa;
+  --light-bg-primary-rgb: 247, 248, 250;
   --light-bg-secondary: #ffffff;
   --light-bg-secondary-rgb: 255, 255, 255;
-  --light-text-primary: #212529;
-  --light-text-primary-rgb: 33, 37, 41;
-  --light-text-secondary: #495057;
-  --light-text-secondary-rgb: 73, 80, 87;
-  --light-accent: #ff9900; /* AWS Orange */
-  --light-accent-rgb: 255, 153, 0;
-  --light-accent-secondary: #232f3e; /* AWS Blue */
-  --light-accent-secondary-rgb: 35, 47, 62;
-  --light-accent-hover: #e68900;
-  --light-bg-hover: #f1f3f4;
-  --light-border-color: #e9ecef;
+  --light-text-primary: #14181f;
+  --light-text-primary-rgb: 20, 24, 31;
+  --light-text-secondary: #5a6270;
+  --light-text-secondary-rgb: 90, 98, 112;
+  --light-accent: #AD5CFF;
+  --light-accent-rgb: 173, 92, 255;
+  --light-accent-secondary: #FF9900; /* AWS orange, used sparingly as a secondary accent */
+  --light-accent-secondary-rgb: 255, 153, 0;
+  --light-accent-hover: #9440e6;
+  --light-accent-contrast: #ffffff;
+  --light-bg-hover: #eef0f3;
+  --light-border-color: #e4e7ec;
   --light-card-bg: #ffffff;
-  --light-card-shadow: rgba(0, 0, 0, 0.1);
-  
-  /* Dark Theme Colors */
-  --dark-bg-primary: #121212;
-  --dark-bg-primary-rgb: 18, 18, 18;
-  --dark-bg-secondary: #1e1e1e;
-  --dark-bg-secondary-rgb: 30, 30, 30;
-  --dark-text-primary: #f8f9fa;
-  --dark-text-primary-rgb: 248, 249, 250;
-  --dark-text-secondary: #adb5bd;
-  --dark-text-secondary-rgb: 173, 181, 189;
-  --dark-accent: #ff9900; 
-  --dark-accent-rgb: 255, 153, 0;
-  --dark-accent-secondary: #00a1c9; 
-  --dark-accent-secondary-rgb: 0, 161, 201;
-  --dark-accent-hover: #e68900;
-  --dark-bg-hover: #2a2a2a;
-  --dark-border-color: #404040;
-  --dark-card-bg: #2d2d2d;
-  --dark-card-shadow: rgba(0, 0, 0, 0.5);
-  
-  /* Default to Dark Theme */
+  --light-card-shadow: rgba(20, 24, 31, 0.08);
+  --light-success: #1b8a5a;
+  --light-warning: #b5720a;
+  --light-warning-rgb: 181, 114, 10;
+  --light-error: #d13b3b;
+
+  /* ---------- Dark Theme Colors ---------- */
+  --dark-bg-primary: #0d1117;
+  --dark-bg-primary-rgb: 13, 17, 23;
+  --dark-bg-secondary: #161d26;
+  --dark-bg-secondary-rgb: 22, 29, 38;
+  --dark-text-primary: #f4f5f7;
+  --dark-text-primary-rgb: 244, 245, 247;
+  --dark-text-secondary: #9aa4b2;
+  --dark-text-secondary-rgb: 154, 164, 178;
+  --dark-accent: #b478ff;
+  --dark-accent-rgb: 180, 120, 255;
+  --dark-accent-secondary: #FF9900;
+  --dark-accent-secondary-rgb: 255, 153, 0;
+  --dark-accent-hover: #c495ff;
+  --dark-accent-contrast: #14101f;
+  --dark-bg-hover: #1e2733;
+  --dark-border-color: #2a333f;
+  --dark-card-bg: #161d26;
+  --dark-card-shadow: rgba(0, 0, 0, 0.45);
+  --dark-success: #3ecf8e;
+  --dark-warning: #f0b429;
+  --dark-warning-rgb: 240, 180, 41;
+  --dark-error: #f26666;
+
+  /* ---------- Active theme (defaults to dark) ---------- */
   --bg-primary: var(--dark-bg-primary);
   --bg-primary-rgb: var(--dark-bg-primary-rgb);
   --bg-secondary: var(--dark-bg-secondary);
@@ -73,19 +129,21 @@
   --accent-secondary: var(--dark-accent-secondary);
   --accent-secondary-rgb: var(--dark-accent-secondary-rgb);
   --accent-hover: var(--dark-accent-hover);
+  --accent-contrast: var(--dark-accent-contrast);
   --bg-hover: var(--dark-bg-hover);
   --border-color: var(--dark-border-color);
   --card-bg: var(--dark-card-bg);
   --card-shadow: var(--dark-card-shadow);
-  --icon-filter: invert(100%); /* For light icons on dark background */
+  --success: var(--dark-success);
+  --warning: var(--dark-warning);
+  --warning-rgb: var(--dark-warning-rgb);
+  --error: var(--dark-error);
+  --icon-filter: invert(100%);
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-family);
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -95,6 +153,7 @@
 
 /* Light Theme Overrides */
 [data-theme="light"] {
+  color-scheme: light;
   --bg-primary: var(--light-bg-primary);
   --bg-primary-rgb: var(--light-bg-primary-rgb);
   --bg-secondary: var(--light-bg-secondary);
@@ -108,98 +167,124 @@
   --accent-secondary: var(--light-accent-secondary);
   --accent-secondary-rgb: var(--light-accent-secondary-rgb);
   --accent-hover: var(--light-accent-hover);
+  --accent-contrast: var(--light-accent-contrast);
   --bg-hover: var(--light-bg-hover);
   --border-color: var(--light-border-color);
   --card-bg: var(--light-card-bg);
   --card-shadow: var(--light-card-shadow);
-  --icon-filter: invert(0%); /* For dark icons on light background */
+  --success: var(--light-success);
+  --warning: var(--light-warning);
+  --warning-rgb: var(--light-warning-rgb);
+  --error: var(--light-error);
+  --icon-filter: invert(0%);
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  color: var(--accent);
+  text-decoration: none;
 }
 
 body {
   margin: 0;
   padding: 0;
-  min-width: 100vw;
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
   overflow-x: hidden;
-
-  font-family: 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+  font-family: var(--font-family);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
-/* Theme transition effect */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--bg-primary);
-  pointer-events: none;
-  opacity: 0;
-  z-index: 9999;
-  transition: opacity 0.3s ease;
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1.2;
 }
 
-body.theme-transition::after {
-  opacity: 0.3;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* ---------- Shared button system ---------- */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  font-size: var(--fs-base);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.75rem 1.5rem;
+  font-size: var(--fs-base);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  transition: background-color var(--transition-base), border-color var(--transition-base),
+    color var(--transition-base), transform var(--transition-fast);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Focus visibility — never suppressed */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* Global utility classes */
+/* ---------- Global utility classes ---------- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 #root {

@@ -2,31 +2,32 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { FaLaptopCode, FaCloudUploadAlt, FaBook, FaNewspaper, FaArrowRight } from 'react-icons/fa';
 import '../pages/styles/Landing.css'; // reuse .resource-card / .section-header styles
 import './styles/InfoPage.css';
 
 // Structured so real destination URLs can be added/edited in one place.
 const resources = [
   {
-    icon: 'fa-laptop-code',
+    icon: FaLaptopCode,
     title: 'AWS Skill Builder',
     description: 'Free, official AWS training platform with courses, labs, and exam prep.',
     url: 'https://skillbuilder.aws/'
   },
   {
-    icon: 'fa-cloud-upload-alt',
+    icon: FaCloudUploadAlt,
     title: 'AWS Free Tier',
     description: 'Practice hands-on with real AWS services at no cost.',
     url: 'https://aws.amazon.com/free/'
   },
   {
-    icon: 'fa-book',
+    icon: FaBook,
     title: 'AWS Documentation',
     description: 'The official technical reference for every AWS service.',
     url: 'https://docs.aws.amazon.com/'
   },
   {
-    icon: 'fa-newspaper',
+    icon: FaNewspaper,
     title: 'AWS Blogs',
     description: 'Announcements, best practices, and deep dives from AWS teams.',
     url: 'https://aws.amazon.com/blogs/aws/'
@@ -64,7 +65,9 @@ function Resources({ theme, toggleTheme }) {
         </div>
 
         <div className="resources-container">
-          {resources.map((item, i) => (
+          {resources.map((item, i) => {
+            const Icon = item.icon;
+            return (
             <motion.div
               className="resource-card"
               key={item.title}
@@ -76,15 +79,16 @@ function Resources({ theme, toggleTheme }) {
               style={{ cursor: 'pointer' }}
             >
               <div className="resource-icon">
-                <i className={`fas ${item.icon}`}></i>
+                <Icon aria-hidden="true" />
               </div>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <a href={item.url} target="_blank" rel="noopener noreferrer" className="resource-link" onClick={(e) => e.stopPropagation()}>
-                Access Now <i className="fas fa-arrow-right"></i>
+                Access Now <FaArrowRight aria-hidden="true" />
               </a>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

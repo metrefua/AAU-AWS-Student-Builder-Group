@@ -313,7 +313,7 @@ function Auth({ theme }) {
         <div className="auth-header">
           <motion.img 
             src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"}
-            alt="AWS Logo" 
+            alt="AWS Student Builder Group Logo" 
             className="auth-logo"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
@@ -324,7 +324,7 @@ function Auth({ theme }) {
             {forgotPasswordStep === 'verify-email' && 'Verify Email'}
             {forgotPasswordStep === 'verify-code' && 'Enter Reset Code'}
             {forgotPasswordStep === 'reset-password' && 'New Password'}
-            {!forgotPasswordStep && 'Welcome to AWS Club'}
+            {!forgotPasswordStep && 'Welcome to AWS Student Builder Group'}
           </h1>
           <p>
             {forgotPasswordStep === 'forgot-password' && 'Enter your email or username'}

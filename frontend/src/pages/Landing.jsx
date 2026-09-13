@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import './styles/Landing.css';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { HiOutlineCloudArrowUp, HiOutlineAcademicCap, HiOutlineBookOpen } from 'react-icons/hi2';
+import { FaBullseye, FaLaptopCode, FaCloud, FaArrowRight } from 'react-icons/fa';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SocialLinks from '../components/SocialLinks';
@@ -14,7 +16,7 @@ import { publicAxios } from '../utils/axios';
 const FALLBACK_EVENTS = [
   {
     _id: 'fallback-aws-meetup-2026-08-15',
-    title: 'AWS Cloud Club Meetup',
+    title: 'AWS Student Builder Group Meetup',
     description: 'Join us for our upcoming community meetup - connect with fellow cloud enthusiasts, hear lightning talks, and get updates on certification study groups.',
     date: '2026-08-15',
     time: '17:00',
@@ -30,6 +32,7 @@ function Landing({ theme, toggleTheme }) {
   const [activeSection, setActiveSection] = useState('home');
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [usingDemoEvents, setUsingDemoEvents] = useState(false);
   const sectionsRef = useRef({});
   const navigate = useNavigate();
   
@@ -43,12 +46,19 @@ function Landing({ theme, toggleTheme }) {
         // Axios automatically throws errors for non-2xx status codes
         // If we reach here, the request was successful
         const fetchedEvents = response.data.events || [];
-        setEvents(fetchedEvents.length > 0 ? fetchedEvents : FALLBACK_EVENTS);
+        if (fetchedEvents.length > 0) {
+          setEvents(fetchedEvents);
+          setUsingDemoEvents(false);
+        } else {
+          setEvents(FALLBACK_EVENTS);
+          setUsingDemoEvents(true);
+        }
       } catch (error) {
         console.error('Error fetching events:', error);
-        // Backend/database not reachable yet - show the fallback event
-        // instead of an empty section.
+        // Backend/database not reachable - show a clearly labeled sample
+        // event instead of an empty section or, worse, unlabeled fake data.
         setEvents(FALLBACK_EVENTS);
+        setUsingDemoEvents(true);
       } finally {
         setLoading(false);
       }
@@ -127,18 +137,6 @@ function Landing({ theme, toggleTheme }) {
     return typeLabels[type] || type;
   };
 
-  const getEventTypeColor = (type) => {
-    const typeColors = {
-      workshop: '#3b82f6',
-      meetup: '#10b981',
-      hackathon: '#f59e0b',
-      webinar: '#8b5cf6',
-      conference: '#ef4444',
-      other: '#6b7280'
-    };
-    return typeColors[type] || '#6b7280';
-  };
-
   return (
     <div className="landing-container">
       <Navbar 
@@ -165,8 +163,13 @@ function Landing({ theme, toggleTheme }) {
           >
             <img 
               src={theme === 'light' ? "/aws-aau-dark.svg" : "/aws-aau-light.svg"} 
-              alt="AWS Logo" 
+              alt="AWS Student Builder Group Icon" 
               className="hero-logo" 
+            />
+            <img
+              src={theme === 'light' ? "/sbg-wordmark-navy.svg" : "/sbg-wordmark-white.svg"}
+              alt="AWS Student Builder Group"
+              className="hero-wordmark"
             />
           </motion.div>
           
@@ -204,12 +207,12 @@ function Landing({ theme, toggleTheme }) {
             transition={{ delay: 1.1, duration: 0.8 }}
           >
             <button
-  className="cta-primary pulse-animation"
+  className="cta-primary"
   onClick={() =>
     handleSocialClick("https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/")
   }
 >
-  Join the Club
+  Join the Group
 </button>
 
             <button className="cta-secondary" onClick={() => scrollToSection('about')}>
@@ -228,18 +231,11 @@ function Landing({ theme, toggleTheme }) {
             <div className="scroll-arrow"></div>
           </motion.div>
         </motion.div>
-        
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-          <div className="shape shape-4"></div>
-        </div>
       </section>
 
       <section id="about" className="about-section" ref={el => sectionsRef.current.about = el}>
         <div className="section-header">
-          <h2>About Our Club</h2>
+          <h2>About Our Group</h2>
           <div className="section-divider">
             <span></span>
             <div className="divider-icon">☁️</div>
@@ -256,7 +252,7 @@ function Landing({ theme, toggleTheme }) {
             viewport={{ once: true, amount: 0.3 }}
           >
             <div className="about-card-icon">
-              <i className="fas fa-bullseye"></i>
+              <FaBullseye />
             </div>
             <h3>Our Mission</h3>
             <p>To empower Addis Ababa University students with AWS cloud skills, foster innovation, and connect members with industry opportunities.</p>
@@ -270,7 +266,7 @@ function Landing({ theme, toggleTheme }) {
             viewport={{ once: true, amount: 0.3 }}
           >
             <div className="about-card-icon">
-              <i className="fas fa-laptop-code"></i>
+              <FaLaptopCode />
             </div>
             <h3>What We Do</h3>
             <p>We organize workshops, real world open-source project contributions, certification study groups, hackathons, and networking events with industry professionals.</p>
@@ -284,7 +280,7 @@ function Landing({ theme, toggleTheme }) {
             viewport={{ once: true, amount: 0.3 }}
           >
             <div className="about-card-icon">
-              <i className="fas fa-cloud"></i>
+              <FaCloud />
             </div>
             <h3>Why AWS?</h3>
             <p>AWS leads cloud computing worldwide. Skills in AWS are highly sought after, offering students a competitive advantage in the job market. Open source projects are available for all students looking for a boost in their resume.</p>
@@ -300,7 +296,7 @@ function Landing({ theme, toggleTheme }) {
         >
           <div className="stat-item">
             <span className="stat-number">250+</span>
-            <span className="stat-label">Club Members</span>
+            <span className="stat-label">Group Members</span>
           </div>
           <div className="stat-item">
             <span className="stat-number">6+</span>
@@ -349,6 +345,12 @@ function Landing({ theme, toggleTheme }) {
             <p>Loading events...</p>
           </motion.div>
         ) : events.length > 0 ? (
+          <>
+          {usingDemoEvents && (
+            <p className="events-demo-note">
+              Showing a sample event — live events will appear here automatically once synced.
+            </p>
+          )}
           <motion.div 
             className="events-container"
             initial={{ opacity: 0, y: 20 }}
@@ -382,25 +384,14 @@ function Landing({ theme, toggleTheme }) {
                       onError={(e) => { e.target.style.display = 'none'; }}
                     />
                   )}
-                  <div style={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'flex-start', 
-                    marginBottom: '0.5rem' 
-                  }}>
+                  <div className="event-title-row">
                     <h3>{event.title}</h3>
-                    <span style={{
-                      padding: '0.25rem 0.75rem',
-                      borderRadius: '20px',
-                      fontSize: '0.75rem',
-                      fontWeight: '700',
-                      textTransform: 'uppercase',
-                      backgroundColor: `${getEventTypeColor(event.type)}20`,
-                      color: getEventTypeColor(event.type),
-                      border: `1px solid ${getEventTypeColor(event.type)}40`
-                    }}>
-                      {getEventTypeLabel(event.type)}
-                    </span>
+                    <div className="event-badges">
+                      {usingDemoEvents && <span className="event-demo-badge">Sample</span>}
+                      <span className={`event-type-badge event-type-${event.type || 'other'}`}>
+                        {getEventTypeLabel(event.type)}
+                      </span>
+                    </div>
                   </div>
                   <div className="event-details">
                     <span>📅 {formatDate(event.date)}</span>
@@ -437,6 +428,7 @@ function Landing({ theme, toggleTheme }) {
               </motion.div>
             ))}
           </motion.div>
+          </>
         ) : (
           <motion.div 
             className="no-events-message"
@@ -478,7 +470,7 @@ function Landing({ theme, toggleTheme }) {
 
       <section id="resources" className="resources-section" ref={el => sectionsRef.current.resources = el}>
         <div className="section-header">
-          <h2>Club Resources</h2>
+          <h2>Group Resources</h2>
           <div className="section-divider">
             <span></span>
             <div className="divider-icon">🔗</div>
@@ -497,11 +489,11 @@ function Landing({ theme, toggleTheme }) {
             style={{ cursor: 'pointer' }}
           >
             <div className="resource-icon">
-              <i className="fas fa-cloud-upload-alt"></i>
+              <HiOutlineCloudArrowUp />
             </div>
             <h3>AWS Free Tier Access</h3>
             <p>Get started with AWS services at no cost through our educational partnership.</p>
-            <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener noreferrer" className="resource-link">Access Now <i className="fas fa-arrow-right"></i></a>
+            <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener noreferrer" className="resource-link">Access Now <FaArrowRight aria-hidden="true" /></a>
           </motion.div>
           
           <motion.div 
@@ -514,11 +506,11 @@ function Landing({ theme, toggleTheme }) {
             style={{ cursor: 'pointer' }}
           >
             <div className="resource-icon">
-              <i className="fas fa-certificate"></i>
+              <HiOutlineAcademicCap />
             </div>
             <h3>Certification Vouchers</h3>
             <p>Active members may qualify for discounted AWS certification exam vouchers.</p>
-            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/certifications'); }} className="resource-link">Learn More <i className="fas fa-arrow-right"></i></a>
+            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/certifications'); }} className="resource-link">Learn More <FaArrowRight aria-hidden="true" /></a>
           </motion.div>
           
           <motion.div 
@@ -531,11 +523,11 @@ function Landing({ theme, toggleTheme }) {
             style={{ cursor: 'pointer' }}
           >
             <div className="resource-icon">
-              <i className="fas fa-book"></i>
+              <HiOutlineBookOpen />
             </div>
             <h3>Learning Materials</h3>
             <p>Access our curated collection of guides, tutorials, and practice exercises.</p>
-            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/resources'); }} className="resource-link">Browse Library <i className="fas fa-arrow-right"></i></a>
+            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/resources'); }} className="resource-link">Browse Library <FaArrowRight aria-hidden="true" /></a>
           </motion.div>
         </div>
         
@@ -549,7 +541,7 @@ function Landing({ theme, toggleTheme }) {
           <h3>What Our Members Say</h3>
           <div className="testimonials-slider">
             <div className="testimonial">
-              <p>"The AWS Club helped me land my dream job as a cloud engineer. The certification prep and hands-on labs were invaluable."</p>
+              <p>"The AWS Student Builder Group helped me land my dream job as a cloud engineer. The certification prep and hands-on labs were invaluable."</p>
               <div className="testimonial-author">
                 <img src="/avatar.svg" alt="Jane Doe" />
                 <div>
@@ -572,10 +564,10 @@ function Landing({ theme, toggleTheme }) {
         >
           <h2>Ready to start your cloud journey?</h2>
           <p>Join our community today and get access to workshops, networking events, and resources to accelerate your career.</p>
-          <button className="join-button pulse-animation"  onClick={() =>
+          <button className="join-button" onClick={() =>
     handleSocialClick("https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/")
   }>
-            Join the Club
+            Join the Group
           </button>
 
         </motion.div>

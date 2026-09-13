@@ -1,7 +1,31 @@
 import "./styles/SocialLinks.css";
 import { discordAPI } from "../utils/api";
+import { useToast } from "../context/ToastContext";
+
+const SOCIAL_LINKS = [
+  {
+    key: "linkedin",
+    label: "LinkedIn",
+    icon: "/linkedin.svg",
+    url: "https://www.linkedin.com/company/aws-cloud-clubs-addis-ababa-university/",
+  },
+  {
+    key: "meetup",
+    label: "Meetup",
+    icon: "/meetup4.png",
+    url: "https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/",
+  },
+  {
+    key: "telegram",
+    label: "Join Telegram",
+    icon: "/Telegram_logo.svg.webp",
+    url: "https://t.me/aws_cloud_club",
+  },
+];
 
 const SocialSection = () => {
+  const { showToast } = useToast();
+
   const handleSocialClick = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
@@ -9,67 +33,41 @@ const SocialSection = () => {
   const handleDiscordClick = async () => {
     try {
       const data = await discordAPI.getInvite();
-      if (data.inviteUrl) {
+      if (data?.inviteUrl) {
         window.open(data.inviteUrl, "_blank", "noopener,noreferrer");
       } else {
-        // Fallback to hardcoded invite if API fails
-        console.warn("No invite URL returned, using fallback");
-        window.open(
-          "https://discord.gg/your-fallback-invite",
-          "_blank",
-          "noopener,noreferrer"
-        );
+        showToast("Discord invite is unavailable right now. Please try again later.", "error");
       }
     } catch (err) {
       console.error("Failed to fetch Discord invite:", err);
-      // Fallback to hardcoded invite if API fails
-      window.open(
-        "https://discord.gg/your-fallback-invite",
-        "_blank",
-        "noopener,noreferrer"
-      );
+      showToast("Couldn't reach Discord right now. Please try again later.", "error");
     }
   };
 
   return (
     <section className="social-section">
       <h2>Follow Us</h2>
-      <p>Stay connected with the AWS Cloud Club at Addis Ababa University</p>
+      <p>Stay connected with the AWS Student Builder Group at Addis Ababa University</p>
       <div className="social-icons">
-        <img
-          src="/linkedin.svg"
-          alt="LinkedIn"
-          style={{ cursor: "pointer", width: "40px", margin: "0 6px" }}
-          onClick={() =>
-            handleSocialClick(
-              "https://www.linkedin.com/company/aws-cloud-clubs-addis-ababa-university/"
-            )
-          }
-        />
-        {/* <img
-          src="/github.svg"
-          alt="GitHub"
-          style={{ cursor: "pointer", width: "40px", margin: "0 6px" }}
-          onClick={() => handleSocialClick("https://github.com/AWS-WSU")}
-        /> */}
-        <img
-          src="/meetup4.png"
-          alt="Meetup"
-          style={{ cursor: "pointer", width: "40px", margin: "0 6px" }}
-          onClick={() =>
-            handleSocialClick("https://www.meetup.com/aws-cloud-club-at-addis-ababa-university/")
-          }
-        />
-        <img
-          src="/Telegram_logo.svg.webp"
-          alt="Join Telegram"
-          style={{ cursor: "pointer", width: "40px", margin: "0 6px" }}
-          onClick={() =>
-            handleSocialClick("https://t.me/aws_cloud_club")
-          }
-
-          
-        />
+        {SOCIAL_LINKS.map((link) => (
+          <button
+            key={link.key}
+            type="button"
+            className="social-icon-button"
+            aria-label={link.label}
+            onClick={() => handleSocialClick(link.url)}
+          >
+            <img src={link.icon} alt="" />
+          </button>
+        ))}
+        <button
+          type="button"
+          className="social-icon-button"
+          aria-label="Join our Discord"
+          onClick={handleDiscordClick}
+        >
+          <img src="/discord.svg" alt="" />
+        </button>
       </div>
     </section>
   );

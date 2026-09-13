@@ -2,31 +2,32 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { FaCertificate, FaServer, FaCode, FaGraduationCap, FaArrowRight } from 'react-icons/fa';
 import '../pages/styles/Landing.css'; // reuse .resource-card / .section-header styles
 import './styles/InfoPage.css';
 
 // Structured so real destination URLs can be added/edited in one place.
 const certifications = [
   {
-    icon: 'fa-certificate',
+    icon: FaCertificate,
     title: 'AWS Certified Cloud Practitioner',
     description: 'The best starting point for students with no prior cloud background.',
     url: 'https://aws.amazon.com/certification/certified-cloud-practitioner/'
   },
   {
-    icon: 'fa-server',
+    icon: FaServer,
     title: 'AWS Certified Solutions Architect – Associate',
     description: 'Design available, cost-efficient, fault-tolerant systems on AWS.',
     url: 'https://aws.amazon.com/certification/certified-solutions-architect-associate/'
   },
   {
-    icon: 'fa-code',
+    icon: FaCode,
     title: 'AWS Certified Developer – Associate',
     description: 'For students who build and maintain applications on AWS.',
     url: 'https://aws.amazon.com/certification/certified-developer-associate/'
   },
   {
-    icon: 'fa-graduation-cap',
+    icon: FaGraduationCap,
     title: 'AWS Certification Exam Prep',
     description: 'Official practice questions and exam readiness guides for every path.',
     url: 'https://aws.amazon.com/certification/certification-prep/'
@@ -64,7 +65,9 @@ function Certifications({ theme, toggleTheme }) {
         </div>
 
         <div className="resources-container">
-          {certifications.map((item, i) => (
+          {certifications.map((item, i) => {
+            const Icon = item.icon;
+            return (
             <motion.div
               className="resource-card"
               key={item.title}
@@ -76,15 +79,16 @@ function Certifications({ theme, toggleTheme }) {
               style={{ cursor: 'pointer' }}
             >
               <div className="resource-icon">
-                <i className={`fas ${item.icon}`}></i>
+                <Icon aria-hidden="true" />
               </div>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <a href={item.url} target="_blank" rel="noopener noreferrer" className="resource-link" onClick={(e) => e.stopPropagation()}>
-                Access Now <i className="fas fa-arrow-right"></i>
+                Access Now <FaArrowRight aria-hidden="true" />
               </a>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

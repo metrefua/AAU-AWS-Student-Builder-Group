@@ -26,7 +26,7 @@
 }
 
 .footer-aws-logo {
-  height: 125px; /* Increased from 45px */
+  height: 48px;
 }
 
 .footer-logo h3 {
@@ -72,15 +72,22 @@
   margin-bottom: 0.8rem;
 }
 
-.footer-section ul li a {
+.footer-section ul li a,
+.footer-section ul li button {
   color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.3s ease, padding-left 0.3s ease;
   display: inline-block;
   font-size: 0.95rem;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
 }
 
-.footer-section ul li a:hover {
+.footer-section ul li a:hover,
+.footer-section ul li button:hover {
   color: var(--accent);
   padding-left: 5px;
 }
@@ -92,11 +99,20 @@
   gap: 10px;
 }
 
-.contact-info i {
+.contact-info svg {
   color: var(--accent);
-  font-size: 1rem;
+  font-size: 1.1rem;
   width: 20px;
-  text-align: center;
+  flex-shrink: 0;
+}
+
+.contact-info a {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+  color: var(--accent);
 }
 
 .social-links {
@@ -239,7 +255,7 @@
   }
 
   .footer-aws-logo {
-    height: 80px; /* More reasonable reduction from 125px */
+    height: 42px;
   }
   
   .footer-logo h3 {
@@ -270,7 +286,7 @@
   }
 
   .footer-aws-logo {
-    height: 60px;
+    height: 38px;
   }
 
   .footer-section {
@@ -291,7 +307,8 @@
     font-size: 0.9rem;
   }
 
-  .footer-section ul li a {
+  .footer-section ul li a,
+  .footer-section ul li button {
     font-size: 0.9rem;
   }
 
